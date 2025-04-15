@@ -32,7 +32,7 @@ public class BaseClass {
 	{
 		System.out.println("Parallel Exceution ");
 	}
-	
+	//pullgit
 //	@Parameters("BROWSER")
 	@BeforeClass(groups = {"smokeTest","regressionTest","sanityTest"})
 	public void beforeClass() throws Throwable
