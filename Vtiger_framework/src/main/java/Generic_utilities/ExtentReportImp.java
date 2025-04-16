@@ -1,5 +1,10 @@
 package Generic_utilities;
 
+import org.testng.ITestResult;
+
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 
 public class ExtentReportImp {
@@ -17,8 +22,8 @@ public class ExtentReportImp {
 	}
 
 	public void onTestFailure(ITestResult result) {
-		test.log(http://Status.FAIL, result.getMethod().getMethodName());
-		test.log(http://Status.FAIL, result.getThrowable());
+		test.log(Status.FAIL, result.getMethod().getMethodName());
+		test.log(Status.FAIL, result.getThrowable());
 		String screenShot = null;
 		try {
 			screenShot = WebDriver_Utility.takeScreenShotEx(BaseClass.sdriver, result.getMethod().getMethodName());

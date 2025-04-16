@@ -20,84 +20,63 @@ import Object_Repository.Home_page;
 import Object_Repository.Login_page;
 import Object_Repository.PrdLookUpImg;
 import Object_Repository.SwitchWindowPage;
-
+//@Test(groups = "smokeTest")
 public class CreateCampaignWithProducttest extends BaseClass {
 @Test
-	public static void CreateCampaignWithProducttest() throws Throwable {
 
-		Excel_utility elib = new Excel_utility();
-		WebDriver_Utility wlib = new WebDriver_Utility();
-	    java_utility jlib = new java_utility();
-	
-		File_utility flib = new File_utility();
-//		String BROWSER = flib.getKeyAndValuePair("browser");
-		String URL = flib.getKeyAndValuePair("url");
-		String USERNAME = flib.getKeyAndValuePair("username");
-		String PASSWORD = flib.getKeyAndValuePair("password");
+public void createCampWithProductTest() throws Throwable {
 
-//		WebDriver driver;
-//
-//		if (BROWSER.equalsIgnoreCase("chrome")) {
-//			driver = new ChromeDriver();
-//		} else if (BROWSER.equalsIgnoreCase("firefox")) {
-//			driver = new FirefoxDriver();
-//		} else if (BROWSER.equalsIgnoreCase("edge")) {
-//			driver = new EdgeDriver();
-//		} else {
-//			driver = new ChromeDriver();
-//		}
+	Excel_Utility elib = new Excel_Utility();
+	Java_Utility jlib = new Java_Utility();
+	WebDriver_Utility wlib = new WebDriver_Utility();
 
-		wlib.maximizeWindow(driver);
-		wlib.waitElementsToLoad(driver);
+	HomePage home = new HomePage(driver);
+	home.clickPrdLink();
 
-		driver.get(URL);
+	PrdLookUpImg lookUp = new PrdLookUpImg(driver);
+	lookUp.clickPrdLookUp();
 
-		Login_page login = new Login_page(driver);
-		login.loginIntoApp(USERNAME, PASSWORD);
+	int ranNum = jlib.getRandomNum();
 
-		Home_page home = new Home_page(driver);
-		home.clickPrdLink();
+	String prdName = elib.getExcelData("Product", 0, 0) + ranNum;
+	System.out.println(prdName);
 
-		PrdLookUpImg lookUp = new PrdLookUpImg(driver);
-		lookUp.clickPrdLookUp();
+	CreatePrdPage prdPage = new CreatePrdPage(driver);
+	prdPage.enterPrdDetails(prdName);
 
-		int ranNum = jlib.getRandomNum();
+//------------------------------------------------------------------------------------------
 
-		String prdName = elib.getExcelData("Product", 0, 0) + ranNum;
-		System.out.println(prdName);
+	home.clickCampLink();
 
-		CreatePrdPage prdPage = new CreatePrdPage(driver);
-		prdPage.enterPrdDetails(prdName);
+//	driver.findElement(By.xpath("//img[@alt='Create Campaign...']")).click();
+	CampLookUpImg lookUpImg = new CampLookUpImg(driver);
+	lookUpImg.clickCampLookUp();
 
-		home.clickCampLink();
+	String CampName = elib.getExcelData("Campaign", 0, 0);
 
-		CampLookUpImg lookUpImg = new CampLookUpImg(driver);
-		lookUpImg.clickCampLookUp();
+	System.out.println(CampName);
 
-		String CampName = elib.getExcelData("Campaign", 0, 0);
+	CreateCampPage campPage = new CreateCampPage(driver);
+	campPage.enterCampDetails(CampName);
 
-		System.out.println(CampName);
+	campPage.clickPrdPlusSign();
 
-		CreateCampPage campPage = new CreateCampPage(driver);
-		campPage.enterCampDetails(CampName);
+	wlib.windowSwitching(driver, "Products&action");
 
-		campPage.clickPrdPlusSign();
+	SwtichingWindowPage switching = new SwtichingWindowPage(driver);
+	switching.searchPrdNAme(CampName);
+	switching.dynamicXpath(driver, prdName);
 
-		wlib.windowSwitching(driver, "Products&action");
+	Thread.sleep(2000);
 
-		SwitchWindowPage switching = new SwitchWindowPage(driver);
-		switching.searchPrdNAme(CampName);
-		switching.dynamicXpath(driver, prdName);
+	// -------------------------------------------------------------------------------------------------
 
-		Thread.sleep(2000);
+	wlib.windowSwitching(driver, "Campaigns&action");
+	campPage.clickSaveButton();
 
-		wlib.windowSwitching(driver, "Campaigns&action");
-		campPage.clickSaveButton();
+	CampValidation validate = new CampValidation(driver);
+	validate.validateCamp(driver, CampName);
+	validate.validatePrd(driver, prdName);
 
-		CampValidation validate = new CampValidation(driver);
-		validate.validateCamp(driver, CampName);
-		validate.validatePrd(driver, prdName);
-
-//		home.logOut(driver);
-	}
+}
 }

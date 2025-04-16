@@ -1,13 +1,18 @@
 package Generic_utilities;
 
+import java.io.File;
 import java.time.Duration;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
+
+import com.tigervnc.vncviewer.FileUtils;
 
 public class WebDriver_Utility {
 
@@ -21,7 +26,6 @@ public class WebDriver_Utility {
 	}
 
 	/**
-	 * This method is used to implicitly wait
 	 * 
 	 * @param driver
 	 */
@@ -50,7 +54,7 @@ public class WebDriver_Utility {
 	}
 
 	/**
-	 * THis method is used to handle the drop down element
+	 * THis method is used to handle the drop down ele
 	 * 
 	 * @param ele
 	 * @param value
@@ -60,17 +64,23 @@ public class WebDriver_Utility {
 		select.selectByValue(value);
 	}
 
-	/**
-	 * This method is used to mouse over to the element
-	 * @param value
-	 */
-	public void mouseoverToEle(WebDriver driver, WebElement value) {
+	public void mouseHoverToEle(WebDriver driver, WebElement value) {
 
 		Actions act = new Actions(driver);
 		act.moveToElement(value).perform();
 	}
+
 	public void alertAccept(WebDriver driver) {
 		driver.switchTo().alert().accept();
-		
 	}
+
+	public static String takeScreenShotEx(WebDriver driver, String screenShotName) throws Throwable {
+		TakesScreenshot takeScreenShot = (TakesScreenshot) driver;
+		File src = takeScreenShot.getScreenshotAs(OutputType.FILE);
+		File dest = new File("./ScreenShots/" + screenShotName + ".png");
+		FileUtils.copyFile(src, dest);
+		return dest.getAbsolutePath();
+
+	}
+
 }
